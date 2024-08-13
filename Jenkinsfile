@@ -4,13 +4,22 @@ pipeline {
         DEPLOY_to = 'production'
     }
     stages {
-        stage ('when') {
-            when {
-                environment name : 'DEPLOY_to' , value: 'production'
-
-            }
+        stage ('build') {
             steps {
-                echo "Deploying to when stage"
+                echo "**** Builing the app"
+            }
+        }
+        stage ('anyofstage') {
+            when {
+                // this stage should trigger if the branch is stage or production
+                anyOf {
+                    expression {BRANCH_NAME ==~ /(production|staging)/} //condition 1
+                    environment name : 'DEPLOY_to' , value: 'production' //conditon 2
+                }
+            }
+                
+            steps {
+                echo "Deploying the app"
             }
         }
     }
