@@ -6,32 +6,32 @@ pipeline {
                 echo "***** Building the application"
             }
         }
-         stage ('Sonar') {
+        stage ('Sonar') {
             steps {
                 echo "***** Building the application"
             }
         }
-         stage ('Dockerbuild') {
+        stage ('Dockerbuild') {
             steps {
                 echo "***** Building the container application"
             }
         }
-         stage ('DockerPush') {
+        stage ('DockerPush') {
             steps {
                 echo "***** Pushing the image ********"
             }
         }
-         stage ('Deploytodev') {
+        stage ('Deploytodev') {
             steps {
                 echo "***** Deploying  the application to dev env*******"
             }
         }
-         stage ('Deploytotest') {
+        stage ('Deploytotest') {
             steps {
                 echo "***** Deploying  the application to dev test*******"
             }
         }
-         stage ('Deploytostage') {
+        stage ('Deploytostage') {
             when {
                 branch "release/*"
             }
@@ -39,7 +39,7 @@ pipeline {
                 echo "***** Deploying  the application to stage env*******"
             }
         }
-         stage ('Deploytoprod') {
+        stage ('Deploytoprod') {
             when {
                 // our application should deploy to prod only if the app is going to though tag
                 //vx.x.x == v1.2.3
@@ -50,4 +50,4 @@ pipeline {
             }
         }
     }
- }
+}
