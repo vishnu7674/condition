@@ -1,16 +1,18 @@
 pipeline {
     agent any
-    environment {
-        DEPLOY_to = 'production'
-    }
     stages {
-        stage ('when') {
+        stage ('build') {
+            steps {
+                echo "Building the application"
+            }
+        }
+        stage ('deploytoprod') {
             when {
-                environment name : 'DEPLOY_to' , value: 'production'
-
+                // this stage should trigger if the branch is stage or production
+                expression {BRANCH_NAME ==~ /(production|staging)/}
             }
             steps {
-                echo "Deploying to when stage"
+                echo "****** Deploying to production*****"
             }
         }
     }
