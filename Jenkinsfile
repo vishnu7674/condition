@@ -1,26 +1,53 @@
-pipeline {
+ pipeline {
     agent any
-    environment {
-        DEPLOY_to = 'something'
-    }
-    stages {
-        stage ('build') {
+    staged {
+        stage ('Build') {
             steps {
-                echo "**** Builing the app"
+                echo "***** Building the application"
             }
         }
-        stage ('anyofstage') {
+         stage ('Sonar') {
+            steps {
+                echo "***** Building the application"
+            }
+        }
+         stage ('Dockerbuild') {
+            steps {
+                echo "***** Building the container application"
+            }
+        }
+         stage ('DockerPush') {
+            steps {
+                echo "***** Pushing the image ********"
+            }
+        }
+         stage ('Deploytodev') {
+            steps {
+                echo "***** Deploying  the application to dev env*******"
+            }
+        }
+         stage ('Deploytotest') {
+            steps {
+                echo "***** Deploying  the application to dev test*******"
+            }
+        }
+         stage ('Deploytostage') {
             when {
-                // this stage should trigger if the branch is stage or production
-                anyOf {
-                    expression {BRANCH_NAME ==~ /(production|staging)/} //condition 1
-                    environment name : 'DEPLOY_to' , value: 'production' //conditon 2
-                }
+                branch "release/*"
             }
-                
             steps {
-                echo "Deploying the app"
+                echo "***** Deploying  the application to stage env*******"
+            }
+        }
+         stage ('Deploytoprod') {
+            when {
+                // our application should deploy to prod only if the app is going to though tag
+                //vx.x.x == v1.2.3
+                tag pattern: "v\\d{1,2}\\.\\d{1,2}\\.\\d{1,2}", comparator: "REGEXP"
+            }
+            steps {
+                echo "***** Deploying  the application to prod env*******"
             }
         }
     }
-}
+ }
